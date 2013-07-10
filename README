@@ -1,0 +1,16 @@
+Problem :- MERCHANT'S GUIDE TO THE GALAXY
+-----------------------------------------
+
+Code :-
+-------
+For this assignment, I have created a Substance class. Metal, Dirt class are inheriting from that class which has two attributes name & value. The objects of these classes are immutable.
+
+I have created a Seperator class, whose job is to seperate Metal & Dirt.
+
+RomanToArabic class converts Roman numeral to Arabic numeral(Integer).
+
+ObjectPriceCalculator class calculated the price of the object.
+
+Testing :-
+----------
+For testing, I have used rspec.

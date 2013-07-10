@@ -1,0 +1,197 @@
+https://github.com/adomokos/DesignPatterns-Ruby
+http://rubylearning.com/blog/2010/11/02/how-does-one-use-design-patterns-in-ruby/
+
+https://github.com/jamesshipton/roman-numeral/blob/master/spec/roman_numeral_spec.rb
+
+Test Input:
+-----------
+glob is I
+prok is V
+pish is X
+tegj is L
+
+glob glob Silver is 34 Credits = II Silver(17)
+glob prok Gold is 57800 Credits = IV Gold(14450)
+pish pish Iron is 3910 Credits = XX Iron(195.5)
+how much is pish tegj glob glob ? = XLII
+how many Credits is glob prok Silver ? = IV Silver(17*4 = 68)
+how many Credits is glob prok Gold ? = IV Gold(14450*4 = 57800)
+how many Credits is glob prok Iron ? = IV Iron(195.5*4 = 782) 
+how much wood could a woodchuck chuck if a woodchuck could chuck wood ?
+
+Test Output:
+------------
+pish tegj glob glob is 42
+glob prok Silver is 68 Credits
+glob prok Gold is 57800 Credits
+glob prok Iron is 782 Credits
+I have no idea what you are talking about
+
+DIRT = {'glob': 'I','pork': 'V', 'pish': 'X', 'tegj': 'L'}
+ROMAN_TO_ARABIC = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+METALS = ['Silver', 'Gold', 'Iron']
+METAL_PRICE = {}
+
+def wealth(treasure)
+	
+
+end
+
+class Dirt
+  def glob
+    'I'
+  end
+  
+  def pork
+    'V'
+  end
+  
+  def pish
+    'X'
+  end
+  
+  def tegj
+    'L'
+  end
+  
+  def method_missing(method, *args, &block)
+	"#{method.to_s} is useless. It doesn't have any value."
+  end
+end
+
+class Substance
+  def initialize(name, value)
+	@name = name
+	@value = value
+  end
+  
+  def name=(name)
+    @name = name
+  end
+  
+  def name
+    @name
+  end
+  
+  def value=(value)
+    @value = value
+  end
+  
+  def value
+    @value
+  end
+end
+
+class Metal < Substance
+end
+
+class Dirt < substance
+end
+
+class RomanToArabic
+  def i
+    1
+  end
+  
+  def v
+    5
+  end
+  
+  def x
+    10
+  end
+  
+  def l
+    50
+  end
+  
+  def c
+    100
+  end
+  
+  def d
+    500
+  end
+  
+  def m
+    1000
+  end
+  
+  def method_missing(method, *args, &block)
+	"#{method.to_s} is not a Roman Numeral"
+  end
+end
+
+class Item
+  def initialize(item)
+    @item = item
+  end
+  
+  def get_metal
+    @metal = @item.split(' ').last
+  end
+  
+  def get_dirt
+    @dirt = @item - @metal
+  end
+  
+end
+
+class Seperator
+  def initialize(item)
+    @item = item
+  end
+  
+  def get_metal
+    @metal = @item.split(' ').last
+  end
+  
+  def get_dirt
+    @dirt = @item.split(' ') - [get_metal]
+  end
+end 
+
+---------------------------------
+
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+class RomanToArabic
+  ROMAN_ARABIC_MAPPING = { I: 1,
+                           V: 5,
+                           X: 10,
+                           L: 50,
+                           C: 100,
+                           D: 500,
+                           M: 1000,
+                           ' '.to_sym => 0}
+
+  VALID_TWO_DIFFERENT_DIGIT_ROMAN = ['IV', 'VI', 'IX', 'XI', 'XL', 'LX', 'XC', 'CX', 'CD', 'DC', 'CM', 'MC']
+
+  def initialize(roman_numeral)
+    @roman_numeral = (roman_numeral.size%2 != 0 ? roman_numeral : roman_numeral << ' ') if validates?(roman_numeral)
+  end
+
+  def get_number
+    num = 0
+    @roman_numeral.split('').each_cons(2) do |x|
+      num += (VALID_TWO_DIFFERENT_DIGIT_ROMAN.include?(x.join) ? get_value(x) : 0)
+    end
+    num
+  end
+
+  def get_value(roman_num)
+    first_digit = ROMAN_ARABIC_MAPPING[roman_num.first.to_sym]
+    last_digit = ROMAN_ARABIC_MAPPING[roman_num.last.to_sym]
+    first_digit > last_digit ? first_digit : last_digit - first_digit
+  end
+
+  def validates?(roman_numeral)
+    thousands, hundreds, tens, units = 'M{0,3}', '(CM|CD|D?C{0,3})', '(XC|XL|L?X{0,3})', '(IX|IV|V?I{0,3})'
+    valid_numeral_pattern = /^#{thousands}#{hundreds}#{tens}#{units}$/
+    roman_numeral =~ valid_numeral_pattern ? true : (raise RomanNumeralError)
+  end
+end
+
+class RomanNumeralError < StandardError
+end
